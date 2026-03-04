@@ -1,1 +1,283 @@
 @import "tailwindcss";
+
+@theme {
+  --font-title: "Black Han Sans", sans-serif;
+  --font-body: "Noto Sans KR", sans-serif;
+  --font-mono: "Orbitron", monospace;
+
+  --color-bg-deep: #0D0D1A;
+  --color-bg-base: #1A1A2E;
+  --color-bg-panel: #16213E;
+  --color-bg-active: #0F3460;
+
+  --color-team-player: #1B6B3A;
+  --color-team-player-light: #2D9B56;
+  --color-team-player-dark: #0E4423;
+  --color-team-enemy: #8B2252;
+  --color-team-enemy-light: #B5335E;
+  --color-team-enemy-dark: #5C1636;
+
+  --color-accent-pink: #FF006E;
+  --color-accent-pink-light: #FF3385;
+  --color-accent-pink-dark: #CC0058;
+  --color-accent-gold: #FFD700;
+  --color-accent-gold-light: #FFEC80;
+  --color-danger: #E63946;
+  --color-danger-light: #FF4D5A;
+  --color-danger-dark: #A31621;
+
+  --color-rope: #8B7355;
+  --color-rope-light: #A0896A;
+  --color-rope-dark: #6B5740;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #E0E0E0;
+  --color-text-muted: #8892A0;
+}
+
+/* Base styles */
+body {
+  margin: 0;
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#root {
+  width: 100dvw;
+  height: 100dvh;
+}
+
+/* ===== ANIMATIONS ===== */
+
+/* Countdown pop */
+@keyframes countdown-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { transform: scale(1.3); opacity: 1; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+
+@utility animate-countdown {
+  animation: countdown-pop 0.8s ease-out forwards;
+}
+
+/* Start flash */
+@keyframes start-flash {
+  0% { transform: scaleX(0); opacity: 0; }
+  50% { transform: scaleX(1.2); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+
+@utility animate-start-flash {
+  animation: start-flash 0.6s ease-out forwards;
+}
+
+/* Screen shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@utility animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Danger pulse (red vignette) */
+@keyframes danger-pulse {
+  0%, 100% { box-shadow: inset 0 0 40px rgba(230,57,70,0); }
+  50% { box-shadow: inset 0 0 40px rgba(230,57,70,0.5); }
+}
+
+@utility animate-danger {
+  animation: danger-pulse 1s ease-in-out infinite;
+}
+
+/* Character pull motion */
+@keyframes pull-motion {
+  0% { transform: translateX(0) rotate(0deg); }
+  30% { transform: translateX(-4px) rotate(-8deg); }
+  60% { transform: translateX(-2px) rotate(-4deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+@utility animate-pull {
+  animation: pull-motion 0.2s ease-out;
+}
+
+/* Victory jump */
+@keyframes victory-jump {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-20px); }
+  60% { transform: translateY(-15px); }
+}
+
+@utility animate-victory {
+  animation: victory-jump 0.6s ease-out 3;
+}
+
+/* Defeat fall — 낭떠러지 추락 (3단계: 버둥거림 → 미끄러짐 → 추락) */
+@keyframes defeat-fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  /* 버둥거리며 발이 미끄러지는 단계 */
+  8% { transform: translateY(-5px) translateX(3px) rotate(-5deg); opacity: 1; }
+  15% { transform: translateY(-3px) translateX(-4px) rotate(5deg); opacity: 1; }
+  22% { transform: translateY(0px) translateX(5px) rotate(-3deg); opacity: 1; }
+  /* 가장자리에서 기울어지는 단계 */
+  35% { transform: translateY(10px) translateX(8px) rotate(15deg); opacity: 1; }
+  45% { transform: translateY(20px) translateX(5px) rotate(25deg); opacity: 1; }
+  /* 자유 낙하 */
+  60% { transform: translateY(80px) translateX(10px) rotate(40deg); opacity: 0.8; }
+  80% { transform: translateY(220px) translateX(15px) rotate(70deg); opacity: 0.4; }
+  100% { transform: translateY(400px) translateX(20px) rotate(100deg); opacity: 0; }
+}
+
+@utility animate-defeat {
+  animation: defeat-fall 2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* 개별 캐릭터 시차 추락 (뒤에 있는 캐릭터가 먼저 떨어짐) */
+@utility animate-defeat-delay-1 {
+  animation: defeat-fall 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0s forwards;
+}
+@utility animate-defeat-delay-2 {
+  animation: defeat-fall 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards;
+}
+@utility animate-defeat-delay-3 {
+  animation: defeat-fall 2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+
+/* 밧줄 끊어짐 */
+@keyframes rope-snap {
+  0% { transform: scaleX(1); opacity: 1; }
+  20% { transform: scaleX(1.05); opacity: 1; }
+  40% { transform: scaleX(0.95) rotate(2deg); opacity: 0.8; }
+  100% { transform: scaleX(0) rotate(5deg); opacity: 0; }
+}
+
+@utility animate-rope-snap {
+  animation: rope-snap 0.6s ease-in forwards;
+}
+
+/* 화면 흔들림 — 추락 시 충격 */
+@keyframes fall-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-8px, 4px); }
+  20% { transform: translate(8px, -2px); }
+  30% { transform: translate(-6px, 3px); }
+  40% { transform: translate(6px, -3px); }
+  50% { transform: translate(-4px, 2px); }
+  60% { transform: translate(4px, -1px); }
+  70% { transform: translate(-2px, 1px); }
+  80% { transform: translate(2px, 0); }
+}
+
+@utility animate-fall-shake {
+  animation: fall-shake 0.8s ease-out;
+}
+
+/* 승리 팀 환호 */
+@keyframes victory-celebrate {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-15px) rotate(-5deg); }
+  40% { transform: translateY(-5px) rotate(3deg); }
+  60% { transform: translateY(-20px) rotate(-3deg); }
+  80% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@utility animate-celebrate {
+  animation: victory-celebrate 1.5s ease-in-out 2;
+}
+
+/* Defeat flash */
+@keyframes defeat-flash {
+  0% { background-color: transparent; }
+  20% { background-color: rgba(230,57,70,0.6); }
+  100% { background-color: transparent; }
+}
+
+@utility animate-defeat-flash {
+  animation: defeat-flash 0.8s ease-out;
+}
+
+/* Tap ripple */
+@keyframes tap-ripple {
+  0% { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@utility animate-ripple {
+  animation: tap-ripple 0.4s ease-out forwards;
+}
+
+/* Gauge pulse */
+@keyframes gauge-pulse {
+  0%, 100% { box-shadow: 0 0 5px var(--color-accent-pink); }
+  50% { box-shadow: 0 0 20px var(--color-accent-pink); }
+}
+
+@utility animate-gauge-pulse {
+  animation: gauge-pulse 0.3s ease-in-out infinite;
+}
+
+/* Float/breathe for title */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@utility animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Fade in up */
+@keyframes fade-in-up {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Pulse glow for buttons */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,0,110,0.3); }
+  50% { box-shadow: 0 0 25px rgba(255,0,110,0.6); }
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Rope tension shimmer */
+@keyframes rope-tension {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@utility animate-rope-tension {
+  animation: rope-tension 0.5s ease-in-out infinite;
+}
+
+/* Heartbeat for danger */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.05); }
+}
+
+@utility animate-heartbeat {
+  animation: heartbeat 0.8s ease-in-out infinite;
+}
